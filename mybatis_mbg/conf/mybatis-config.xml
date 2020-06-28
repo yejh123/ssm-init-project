@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--全局配置文件
+元素类型为 "configuration" 的内容必须匹配
+"(properties?,settings?,typeAliases?,typeHandlers?,
+objectFactory?,objectWrapperFactory?,reflectorFactory?,
+plugins?,environments?,databaseIdProvider?,mappers?)"-->
+
+<configuration>
+    <!--1、resource：从类路径下开始引用
+    url：应用磁盘路径或者网络路径的资源-->
+    <!--    <properties resource="dbconfig.properties"/>-->
+
+
+    <!--2、设置-->
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+
+        <!--延迟加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--属性按需加载-->
+        <setting name="aggressiveLazyLoading" value="false"/>
+
+        <!--开启全局缓存开关-->
+        <setting name="cacheEnabled" value="true"/>
+
+    </settings>
+
+
+    <!--    &lt;!&ndash;3、类型别名，为常用的类型（javabean）起别名-->
+    <!--    alias=""指定一个别名-->
+    <!--    但是依旧推荐不起别名，直接用全类名&ndash;&gt;-->
+    <!--    <typeAliases>-->
+    <!--        &lt;!&ndash;        <typeAlias type="com.yejh.bean.Employee" />&ndash;&gt;-->
+    <!--        &lt;!&ndash;批量起别名；name=包名，默认别名就是类名，可以在类中添加Alias注解指定别名&ndash;&gt;-->
+    <!--        <package name="com.yejh.bean"/>-->
+    <!--    </typeAliases>-->
+
+    <!--    &lt;!&ndash;4、typeHandler类型处理器&ndash;&gt;-->
+    <!--    &lt;!&ndash;    <typeHandlers>&ndash;&gt;-->
+    <!--    &lt;!&ndash;        <typeHandler handler=""/>&ndash;&gt;-->
+    <!--    &lt;!&ndash;    </typeHandlers>&ndash;&gt;-->
+
+    <!--    &lt;!&ndash;5、插件plugin&ndash;&gt;-->
+
+
+    <!--
+    plugins在配置文件中的位置必须符合要求，否则会报错，顺序如下:
+    properties?, settings?,
+    typeAliases?, typeHandlers?,
+    objectFactory?,objectWrapperFactory?,
+    plugins?,
+    environments?, databaseIdProvider?, mappers?
+-->
+    <plugins>
+        <!-- com.github.pagehelper为PageHelper类所在包名 -->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 使用下面的方式配置参数，后面会有所有的参数介绍 -->
+<!--            <property name="param1" value="value1"/>-->
+        </plugin>
+    </plugins>
+
+    <environments default="development">
+        <!--每一个环境都需要一个事务处理器和一个数据源
+        数据源和事务管理器应该都由spring管理-->
+
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <!--配置连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis?serverTimezone=UTC"/>
+                <property name="username" value="root"/>
+                <property name="password" value="861861"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--    &lt;!&ndash;6、databaseIdProvider支持数据库移植性&ndash;&gt;-->
+    <!--    <databaseIdProvider type="DB_VENDOR">-->
+    <!--        &lt;!&ndash;name为数据库厂商标识，value：给这个标识起一个别名&ndash;&gt;-->
+    <!--        <property name="MySQL" value="mysql"/>-->
+    <!--        <property name="Oracle" value="orcl"/>-->
+    <!--    </databaseIdProvider>-->
+
+    <!--    &lt;!&ndash;7、mappers-->
+    <!--    注册自己编写的每一个接口的实现文件&ndash;&gt;-->
+    <mappers>
+        <!--resource表示从类路径下找资源
+        url：可以从磁盘或者网络路径引用
+        resource：在类路径下找sql映射文件
+        class：直接引用接口的全类名；可以将xml放在和dao接口同目录下，而且文件名和接口名一致-->
+        <!--        <mapper resource="mybatis/EmployeeDao.xml"/>-->
+        <!--        <mapper class="com.yejh.dao.EmployeeDaoAnnotation"/>-->
+        <!--重要的dao可以配置，简单的dao就直接写注解-->
+
+        <!--批量注册-->
+        <package name="com.yejh.dao"/>
+    </mappers>
+</configuration>
